@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ---------- Färgtokens (RGB-trioler så att opacitet fungerar: bg-ink/15) ---------- */
+  :root {
+    --paper: 251 249 245; /* #FBF9F5 varm elfenben */
+    --sand: 240 234 225; /* #F0EAE1 kort */
+    --sand-deep: 232 225 211; /* #E8E1D3 nedsänkta ytor */
+    --ink: 30 30 28; /* #1E1E1C bläck / grafit */
+    --ink-soft: 92 90 84; /* #5C5A54 dämpad text */
+    --rust: 186 74 39; /* #BA4A27 stämpelrost */
+    --compass: 74 96 112; /* #4A6070 kompassblå */
+    --on-rust: 251 249 245; /* text på rost */
+  }
+
+  /* Nattpapper (mörkt läge) */
+  html.dark {
+    --paper: 26 25 22; /* #1A1916 */
+    --sand: 36 34 30; /* #24221E */
+    --sand-deep: 46 43 37; /* #2E2B25 */
+    --ink: 237 232 221; /* #EDE8DD */
+    --ink-soft: 168 163 150; /* #A8A396 */
+    --rust: 217 119 82; /* #D97752 */
+    --compass: 143 167 182; /* #8FA7B6 */
+    --on-rust: 26 25 22;
+  }
+
+  html {
+    @apply antialiased;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  /* Papper med mycket diskret korn */
+  body {
+    @apply bg-paper font-sans text-ink transition-colors duration-300;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.2 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Rubriker i redaktionell serif */
+  h1,
+  h2,
+  h3 {
+    @apply font-serif tracking-tight;
+  }
+
+  ::selection {
+    background: rgb(var(--rust) / 0.25);
+  }
+
+  /* Tydligt tangentbordsfokus */
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  [role='checkbox']:focus-visible {
+    outline: 2px solid rgb(var(--rust));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Kort: ett sandfärgat ark med tunn bläcklinje */
+  .kort {
+    @apply rounded-ark border border-ink/15 bg-sand shadow-ark transition-colors;
+  }
+
+  /* Metadata: små versaler, som etiketter i en kartbok */
+  .meta {
+    @apply text-[11px] font-semibold uppercase tracking-stampel tabular-nums text-ink-soft;
+  }
+
+  /* Inmatningsfält */
+  .falt {
+    @apply w-full rounded-ark border border-ink/25 bg-paper px-3.5 py-2.5 text-sm text-ink transition placeholder:text-ink-soft/70 focus:border-rust;
+  }
+
+  .knapp-primar {
+    @apply inline-flex items-center justify-center gap-2 rounded-ark bg-rust px-4 py-2.5 text-sm font-semibold text-onrust shadow-sm transition hover:bg-rust/90 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-45;
+  }
+
+  .knapp-sekundar {
+    @apply inline-flex items-center justify-center gap-2 rounded-ark border border-ink/30 bg-transparent px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-sand-deep active:translate-y-px;
+  }
+
+  /* Destruktiv handling: kontur i rost som fylls vid hover */
+  .knapp-fara {
+    @apply inline-flex items-center justify-center gap-2 rounded-ark border border-rust bg-transparent px-4 py-2.5 text-sm font-semibold text-rust transition hover:bg-rust hover:text-onrust active:translate-y-px;
+  }
+
+  .ikonknapp {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-ark text-ink-soft transition hover:bg-sand-deep hover:text-ink;
+  }
+
+  /* Gummistämpel-etikett, t.ex. "Nådd" */
+  .stampel {
+    @apply inline-block -rotate-6 rounded-[4px] border-2 border-rust px-2 py-0.5 text-[11px] font-bold uppercase tracking-stampel text-rust;
+  }
+}
+
+/* Respektera användare som vill ha mindre rörelse */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
